@@ -14,7 +14,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class RegisterViewModel(private val userPreferences: UserPreferences) : ViewModel() {
+class RegisterViewModel(private val pref: UserPreferences) : ViewModel() {
 
     private val _registerResult = MutableLiveData<Resource<String>>()
     val registerResult: LiveData<Resource<String>> = _registerResult

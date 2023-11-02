@@ -2,7 +2,6 @@ package com.devapps.storyapp.customview
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
@@ -32,28 +31,31 @@ class PasswordEditText : AppCompatEditText {
 
     private fun init() {
         lockImage = ContextCompat.getDrawable(context, R.drawable.ic_lock) as Drawable
-        transformationMethod = PasswordTransformationMethod.getInstance()
         onShowVisibilityIcon(lockImage)
 
         addTextChangedListener(onTextChanged = { p0: CharSequence?, p1: Int, p2: Int, p3: Int ->
-            val pass = text?.trim()
-            when {
-                pass.isNullOrEmpty() -> {
-                    isPassValid = false
-                    error = resources.getString(R.string.input_pass)
-                }
-
-                pass.length < 8 -> {
-                    isPassValid = false
-                    error = resources.getString(R.string.pass_length)
-                }
-
-                else -> {
-                    isPassValid = true
-                    error = null
-                }
-            }
+            validatePassword()
         })
+    }
+
+    private fun validatePassword() {
+        val pass = text?.trim()
+        when {
+            pass.isNullOrEmpty() -> {
+                isPassValid = false
+                error = resources.getString(R.string.input_pass)
+            }
+
+            pass.length < 8 -> {
+                isPassValid = false
+                error = resources.getString(R.string.pass_length)
+            }
+
+            else -> {
+                isPassValid = true
+                error = null
+            }
+        }
     }
 
     private fun onShowVisibilityIcon(icon: Drawable) {
@@ -72,7 +74,5 @@ class PasswordEditText : AppCompatEditText {
             endOfTheText,
             bottomOfTheText
         )
-
     }
-
 }

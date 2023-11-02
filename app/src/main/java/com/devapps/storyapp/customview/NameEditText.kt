@@ -33,16 +33,19 @@ class NameEditText : AppCompatEditText {
         personIcon = ContextCompat.getDrawable(context, R.drawable.ic_person) as Drawable
         onShowVisibilityIcon(personIcon)
 
-        addTextChangedListener(onTextChanged = { p0: CharSequence?, p1: Int, p2: Int, p3: Int ->
-            val name = text?.trim()
-            if (name.isNullOrEmpty()) {
-                isNameValid = false
-                error = resources.getString(R.string.name_required)
-            } else {
-                isNameValid = true
-                error = null
-            }
-        })
+        addTextChangedListener { text ->
+            validateName(text?.trim().toString())
+        }
+    }
+
+    private fun validateName(name: String) {
+        if (name.isEmpty()) {
+            isNameValid = false
+            error = resources.getString(R.string.name_required)
+        } else {
+            isNameValid = true
+            error = null
+        }
     }
 
     private fun onShowVisibilityIcon(icon: Drawable) {

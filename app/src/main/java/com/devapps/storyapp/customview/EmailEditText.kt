@@ -32,38 +32,24 @@ class EmailEditText : AppCompatEditText {
 
     private fun init() {
         emailImage = ContextCompat.getDrawable(context, R.drawable.ic_email) as Drawable
-        onShowVisibilityIcon(emailImage)
+        setCompoundDrawablesWithIntrinsicBounds(emailImage, null, null, null) // Tambahkan baris ini
 
-        addTextChangedListener(onTextChanged = {p0: CharSequence?, p1: Int, p2: Int, p3: Int ->
-            val email = text?.trim()
-            if (email.isNullOrEmpty()) {
-                isEmailValid = false
-                error = resources.getString(R.string.input_email)
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                isEmailValid = false
-                error = resources.getString(R.string.invalid_email)
-            } else {
-                isEmailValid = true
-                error = null
-            }
+        addTextChangedListener(onTextChanged = { p0: CharSequence?, p1: Int, p2: Int, p3: Int ->
+            validateEmail() // Ganti nama fungsi ini untuk konsistensi
         })
     }
 
-    private fun onShowVisibilityIcon(icon: Drawable) {
-        setButtonDrawables(startOfTheText = icon)
-    }
-
-    private fun setButtonDrawables(
-        startOfTheText: Drawable? = null,
-        topOfTheText: Drawable? = null,
-        endOfTheText: Drawable? = null,
-        bottomOfTheText: Drawable? = null
-    ) {
-        setCompoundDrawablesWithIntrinsicBounds(
-            startOfTheText,
-            topOfTheText,
-            endOfTheText,
-            bottomOfTheText
-        )
+    private fun validateEmail() {
+        val email = text?.trim()
+        if (email.isNullOrEmpty()) {
+            isEmailValid = false
+            error = resources.getString(R.string.input_email)
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            isEmailValid = false
+            error = resources.getString(R.string.invalid_email)
+        } else {
+            isEmailValid = true
+            error = null
+        }
     }
 }
