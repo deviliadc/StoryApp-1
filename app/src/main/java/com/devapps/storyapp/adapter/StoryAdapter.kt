@@ -6,31 +6,29 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.devapps.storyapp.data.model.Story
 import com.devapps.storyapp.databinding.ItemStoryBinding
 import com.devapps.storyapp.ui.DetailStoryActivity
 
-class StoryAdapter: RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
-    private val storyData = ArrayList<Story>()
+class StoryAdapter : ListAdapter<Story, StoryAdapter.StoryViewHolder>(StoryDiffCallback()) {
 
-    fun setData(stories: ArrayList<Story>) {
-        storyData.clear()
-        storyData.addAll(stories)
-        notifyDataSetChanged()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryViewHolder {
+        return StoryViewHolder(
+            ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StoryViewHolder(
-        ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
 
-    override fun onBindViewHolder(holder: StoryViewHolder, position: Int) =
-        holder.bind(storyData[position])
-
-    override fun getItemCount() = storyData.size
+    override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
 
     inner class StoryViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(story: Story) {
             with(binding) {
                 Glide.with(itemView.context)
@@ -51,6 +49,16 @@ class StoryAdapter: RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
                     )
                 it.context.startActivity(intent, optionsCompat.toBundle())
             }
+        }
+    }
+
+    private class StoryDiffCallback : DiffUtil.ItemCallback<Story>() {
+        override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Story, newItem: Story): Boolean {
+            return oldItem == newItem
         }
     }
 }

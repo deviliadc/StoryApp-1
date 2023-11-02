@@ -13,6 +13,8 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
         @Volatile
         private var INSTANCE: UserPreferences? = null
 
+        const val TOKEN_KEY = "token"
+
         fun getInstance(dataStore: DataStore<Preferences>): UserPreferences {
             return INSTANCE ?: synchronized(this) {
                 val instance = UserPreferences(dataStore)
@@ -20,26 +22,26 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
                 instance
             }
         }
-
-        private val TOKEN_KEY = stringPreferencesKey("token")
-
     }
 
     fun getSession(): Flow<String> {
+        val tokenKey = stringPreferencesKey(TOKEN_KEY)
         return dataStore.data.map { preferences ->
-            preferences[TOKEN_KEY] ?: ""
+            preferences[tokenKey] ?: ""
         }
     }
 
     suspend fun saveSession(token: String) {
+        val tokenKey = stringPreferencesKey(TOKEN_KEY)
         dataStore.edit { preferences ->
-            preferences[TOKEN_KEY] = token
+            preferences[tokenKey] = token
         }
     }
 
     suspend fun deleteSession() {
+        val tokenKey = stringPreferencesKey(TOKEN_KEY)
         dataStore.edit { preferences ->
-            preferences.remove(TOKEN_KEY)
+            preferences.remove(tokenKey)
         }
     }
 }

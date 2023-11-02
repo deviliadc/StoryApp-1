@@ -7,14 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devapps.storyapp.data.Resource
 import com.devapps.storyapp.data.api.ApiConfig
-import com.devapps.storyapp.data.pref.UserPreferences
 import com.devapps.storyapp.data.request.RegisterRequest
 import com.devapps.storyapp.data.response.AppResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class RegisterViewModel(private val pref: UserPreferences) : ViewModel() {
+class RegisterViewModel : ViewModel() {
 
     private val _registerResult = MutableLiveData<Resource<String>>()
     val registerResult: LiveData<Resource<String>> = _registerResult

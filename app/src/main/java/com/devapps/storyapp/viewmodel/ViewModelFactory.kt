@@ -12,7 +12,7 @@ class ViewModelFactory(private val pref: UserPreferences) : ViewModelProvider.Ne
             return LoginViewModel(pref) as T
         }
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
-            return RegisterViewModel(pref) as T
+            return RegisterViewModel() as T
         }
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(pref) as T
