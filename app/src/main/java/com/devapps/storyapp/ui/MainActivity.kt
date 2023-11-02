@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.stories.observe(this) {
                     when (it) {
                         is Resource.Success -> {
-                            it.data?.let { stories -> storyAdapter.setData(stories) }
+                            it.data?.let { stories ->
+                                storyAdapter.submitList(stories) }
                             showLoad(false)
                         }
                         is Resource.Loading -> showLoad(true)
