@@ -98,29 +98,22 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setAnimation() {
-        val registerImageView = binding.registerImageView
-        val translationX = ObjectAnimator.ofFloat(registerImageView, View.TRANSLATION_X, -2000f, 0f).apply {
-            duration = 1000
-        }
-        val alpha = ObjectAnimator.ofFloat(registerImageView, View.ALPHA, 0f, 1f).apply {
-            duration = 700
-        }
+        ObjectAnimator.ofFloat(binding.registerImageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 4000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
 
-        AnimatorSet().apply {
-            playTogether(translationX, alpha)
-            start()
-        }
-
-        val tvTitle = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(700)
-        val tvName = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(700)
-        val etName = ObjectAnimator.ofFloat(binding.nameEditText, View.ALPHA, 1f).setDuration(700)
-        val tvEmail = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(700)
-        val etEmail = ObjectAnimator.ofFloat(binding.emailEditText, View.ALPHA, 1f).setDuration(700)
-        val tvPassword = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(700)
-        val etPassword = ObjectAnimator.ofFloat(binding.passwordEditText, View.ALPHA, 1f).setDuration(700)
-        val btnRegister = ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(700)
-        val msgLogin = ObjectAnimator.ofFloat(binding.massageLoginLink, View.ALPHA, 1f).setDuration(700)
-        val linkLogin = ObjectAnimator.ofFloat(binding.loginLink, View.ALPHA, 1f).setDuration(700)
+        val tvTitle = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
+        val tvName = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
+        val etName = ObjectAnimator.ofFloat(binding.nameEditText, View.ALPHA, 1f).setDuration(100)
+        val tvEmail = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val etEmail = ObjectAnimator.ofFloat(binding.emailEditText, View.ALPHA, 1f).setDuration(100)
+        val tvPassword = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val etPassword = ObjectAnimator.ofFloat(binding.passwordEditText, View.ALPHA, 1f).setDuration(100)
+        val btnRegister = ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(100)
+        val msgLogin = ObjectAnimator.ofFloat(binding.massageLoginLink, View.ALPHA, 1f).setDuration(100)
+        val linkLogin = ObjectAnimator.ofFloat(binding.loginLink, View.ALPHA, 1f).setDuration(100)
 
         val textAnim = AnimatorSet().apply {
             playTogether(tvTitle, msgLogin, linkLogin)
@@ -135,7 +128,7 @@ class RegisterActivity : AppCompatActivity() {
                 layoutAnim,
                 btnRegister
             )
-            start()
-        }
+            startDelay = 100
+        }.start()
     }
 }

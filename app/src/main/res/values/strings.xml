@@ -2,15 +2,12 @@
     <string name="app_name">StoryApp</string>
     <string name="register">Register</string>
     <string name="login">Log In</string>
-    <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>
-    <string name="title_welcome_page">Welcome Back,</string>
     <string name="title_register_page">Create a new account</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="title_login_page">Welcome Back,</string>
     <string name="message_login_page">Log in now to continue</string>
     <string name="name">Name</string>
-    <string name="message_main_page">Selamat Belajar di Dicoding.</string>
     <string name="greeting">Hello, %1$s,</string>
     <string name="logout">Log Out</string>
     <string name="photos">Photos</string>
@@ -34,4 +31,5 @@
     <string name="image_detail">Image Detail Story</string>
     <string name="didnt_get_permission">Didn\'t Get Permission</string>
     <string name="input_image_first">Input Image First</string>
+    <string name="logo_description">Logo Story App</string>
 </resources>

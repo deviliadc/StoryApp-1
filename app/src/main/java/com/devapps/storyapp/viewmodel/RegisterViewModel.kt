@@ -12,9 +12,7 @@ import com.devapps.storyapp.data.request.RegisterRequest
 import com.devapps.storyapp.data.response.AppResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response as RetrofitResponse
+import retrofit2.Response
 
 class RegisterViewModel(private val userPreferences: UserPreferences) : ViewModel() {
 
@@ -25,16 +23,9 @@ class RegisterViewModel(private val userPreferences: UserPreferences) : ViewMode
         viewModelScope.launch {
             _registerResult.postValue(Resource.Loading())
             try {
-                ApiConfig.getApiClient().register(RegisterRequest(name, email, password))
-                    .enqueue(object : Callback<AppResponse> {
-                        override fun onResponse(call: Call<AppResponse>, response: RetrofitResponse<AppResponse>) {
-                            handleRegisterResponse(response)
-                        }
-
-                        override fun onFailure(call: Call<AppResponse>, t: Throwable) {
-                            _registerResult.postValue(Resource.Error("An error occurred"))
-                        }
-                    })
+                val response: Response<AppResponse> =
+                    ApiConfig.getApiClient().register(RegisterRequest(name, email, password))
+                handleRegisterResponse(response)
             } catch (e: Exception) {
                 Log.e(RegisterViewModel::class.java.simpleName, "Exception during register: $e")
                 _registerResult.postValue(Resource.Error("An error occurred"))
@@ -42,16 +33,21 @@ class RegisterViewModel(private val userPreferences: UserPreferences) : ViewMode
         }
     }
 
-    private fun handleRegisterResponse(response: RetrofitResponse<AppResponse>) {
-        if (response.isSuccessful) {
-            val message = response.body()?.message.toString()
-            _registerResult.postValue(Resource.Success(message))
-        } else {
-            val errorResponse = Gson().fromJson(
-                response.errorBody()?.charStream(),
-                AppResponse::class.java
-            )
-            _registerResult.postValue(Resource.Error(errorResponse?.message ?: "Unknown error"))
+    private fun handleRegisterResponse(response: Response<AppResponse>) {
+        try {
+            if (response.isSuccessful) {
+                val message = response.body()?.message.toString()
+                _registerResult.postValue(Resource.Success(message))
+            } else {
+                val errorResponse = Gson().fromJson(
+                    response.errorBody()?.charStream(),
+                    AppResponse::class.java
+                )
+                _registerResult.postValue(Resource.Error(errorResponse?.message ?: "Unknown error"))
+            }
+        } catch (e: Exception) {
+            Log.e(RegisterViewModel::class.java.simpleName, "Exception during handleRegisterResponse: $e")
+            _registerResult.postValue(Resource.Error("An error occurred"))
         }
     }
 }

@@ -97,18 +97,11 @@ class LoginActivity : AppCompatActivity() {
                 !binding.emailEditText.text.isNullOrEmpty() && !binding.passwordEditText.text.isNullOrEmpty()
 
     private fun setAnimation() {
-        val registerImageView = binding.loginImageView
-        val translationX = ObjectAnimator.ofFloat(registerImageView, View.TRANSLATION_X, -2000f, 0f).apply {
-            duration = 1000
-        }
-        val alpha = ObjectAnimator.ofFloat(registerImageView, View.ALPHA, 0f, 1f).apply {
-            duration = 700
-        }
-
-        AnimatorSet().apply {
-            playTogether(translationX, alpha)
-            start()
-        }
+        ObjectAnimator.ofFloat(binding.loginImageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 4000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
 
         val titleTextView = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(700)
         val msgTextView = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(700)
@@ -133,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
                 layoutAnim,
                 btnLogin
             )
-            start()
-        }
+            startDelay = 100
+        }.start()
     }
 }

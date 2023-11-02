@@ -12,7 +12,7 @@ import com.devapps.storyapp.data.request.LoginRequest
 import com.devapps.storyapp.data.response.LoginResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import retrofit2.Call
+import retrofit2.Response
 
 class LoginViewModel(private val userPreferences: UserPreferences) : ViewModel() {
 
@@ -20,19 +20,21 @@ class LoginViewModel(private val userPreferences: UserPreferences) : ViewModel()
     val loginResult: LiveData<Resource<String>> = _loginResult
 
     fun login(email: String, password: String) {
-        _loginResult.postValue(Resource.Loading())
-        try {
-            val call: Call<LoginResponse> = ApiConfig.getApiClient().login(LoginRequest(email, password))
-            handleLoginResponse(call)
-        } catch (e: Exception) {
-            Log.e(LoginViewModel::class.java.simpleName, "Exception during login: $e")
-            _loginResult.postValue(Resource.Error("An error occurred"))
+        viewModelScope.launch {
+            _loginResult.postValue(Resource.Loading())
+            try {
+                val response: Response<LoginResponse> =
+                    ApiConfig.getApiClient().login(LoginRequest(email, password))
+                handleLoginResponse(response)
+            } catch (e: Exception) {
+                Log.e(LoginViewModel::class.java.simpleName, "Exception during login: $e")
+                _loginResult.postValue(Resource.Error("An error occurred"))
+            }
         }
     }
 
-    private fun handleLoginResponse(call: Call<LoginResponse>) {
+    private fun handleLoginResponse(response: Response<LoginResponse>) {
         try {
-            val response = call.execute()
             if (response.isSuccessful) {
                 val result = response.body()?.loginResult?.token
                 result?.let { saveUserToken(it) }

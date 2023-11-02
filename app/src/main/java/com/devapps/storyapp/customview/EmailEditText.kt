@@ -44,6 +44,7 @@ class EmailEditText : AppCompatEditText {
                 error = resources.getString(R.string.invalid_email)
             } else {
                 isEmailValid = true
+                error = null
             }
         })
     }

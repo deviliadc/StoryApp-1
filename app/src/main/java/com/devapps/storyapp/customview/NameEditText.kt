@@ -40,6 +40,7 @@ class NameEditText : AppCompatEditText {
                 error = resources.getString(R.string.name_required)
             } else {
                 isNameValid = true
+                error = null
             }
         })
     }

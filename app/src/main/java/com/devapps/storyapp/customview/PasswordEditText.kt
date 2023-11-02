@@ -50,6 +50,7 @@ class PasswordEditText : AppCompatEditText {
 
                 else -> {
                     isPassValid = true
+                    error = null
                 }
             }
         })

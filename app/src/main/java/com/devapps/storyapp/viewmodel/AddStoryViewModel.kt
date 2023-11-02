@@ -12,8 +12,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 class AddStoryViewModel(private val pref: UserPreferences) : ViewModel() {
@@ -26,35 +24,33 @@ class AddStoryViewModel(private val pref: UserPreferences) : ViewModel() {
         description: RequestBody,
     ) {
         _uploadInfo.postValue(Resource.Loading())
-        val client = ApiConfig.getApiClient().addStory(
-            token = "Bearer ${pref.getSession().first()}",
-            imageMultipart,
-            description
-        )
+        try {
+            val response: Response<AppResponse> = ApiConfig.getApiClient().addStory(
+                token = "Bearer ${pref.getSession().first()}",
+                imageMultipart,
+                description
+            )
+            handleUploadResponse(response)
+        } catch (e: Exception) {
+            Log.e(AddStoryViewModel::class.java.simpleName, "Exception during uploadStory: $e")
+            _uploadInfo.postValue(Resource.Error("An error occurred"))
+        }
+    }
 
-        client.enqueue(object : Callback<AppResponse> {
-            override fun onResponse(
-                call: Call<AppResponse>,
-                response: Response<AppResponse>
-            ) {
-                if (response.isSuccessful) {
-                    _uploadInfo.postValue(Resource.Success(response.body()?.message))
-                } else {
-                    val errorResponse = Gson().fromJson(
-                        response.errorBody()?.charStream(),
-                        AppResponse::class.java
-                    )
-                    _uploadInfo.postValue(Resource.Error(errorResponse.message))
-                }
-            }
-
-            override fun onFailure(call: Call<AppResponse>, t: Throwable) {
-                Log.e(
-                    AddStoryViewModel::class.java.simpleName,
-                    "onFailure upload"
+    private fun handleUploadResponse(response: Response<AppResponse>) {
+        try {
+            if (response.isSuccessful) {
+                _uploadInfo.postValue(Resource.Success(response.body()?.message))
+            } else {
+                val errorResponse = Gson().fromJson(
+                    response.errorBody()?.charStream(),
+                    AppResponse::class.java
                 )
-                _uploadInfo.postValue(Resource.Error(t.message))
+                _uploadInfo.postValue(Resource.Error(errorResponse.message))
             }
-        })
+        } catch (e: Exception) {
+            Log.e(AddStoryViewModel::class.java.simpleName, "Exception during handleUploadResponse: $e")
+            _uploadInfo.postValue(Resource.Error("An error occurred"))
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -37,13 +38,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupViewModel()
+        setupToolbar()
         setupView()
         setupClickListeners()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        moveTaskToBack(true)
+    private fun setupToolbar() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,7 +68,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
     private fun setupClickListeners() {
         binding.fabAdd.setOnClickListener {
