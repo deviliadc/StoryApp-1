@@ -98,11 +98,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setAnimation() {
-        ObjectAnimator.ofFloat(binding.registerImageView, View.TRANSLATION_X, -30f, 30f).apply {
+        val translateAnimator = ObjectAnimator.ofFloat(binding.registerImageView, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 4000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
-        }.start()
+        }
 
         val tvTitle = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
         val tvName = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
@@ -118,17 +118,19 @@ class RegisterActivity : AppCompatActivity() {
         val textAnim = AnimatorSet().apply {
             playTogether(tvTitle, msgLogin, linkLogin)
         }
+
         val layoutAnim = AnimatorSet().apply {
-            playTogether(tvName, etName, tvEmail, etEmail, tvPassword, etPassword)
+            playTogether(tvName, etName, tvEmail, etEmail, tvPassword, etPassword, btnRegister)
         }
 
         AnimatorSet().apply {
             playSequentially(
+                translateAnimator,
                 textAnim,
-                layoutAnim,
-                btnRegister
+                layoutAnim
             )
             startDelay = 100
-        }.start()
+            start()
+        }
     }
 }

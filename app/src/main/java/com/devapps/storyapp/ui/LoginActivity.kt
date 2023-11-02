@@ -97,36 +97,39 @@ class LoginActivity : AppCompatActivity() {
                 !binding.emailEditText.text.isNullOrEmpty() && !binding.passwordEditText.text.isNullOrEmpty()
 
     private fun setAnimation() {
-        ObjectAnimator.ofFloat(binding.loginImageView, View.TRANSLATION_X, -30f, 30f).apply {
+        val translateAnimator = ObjectAnimator.ofFloat(binding.loginImageView, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 4000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
-        }.start()
+        }
 
         val titleTextView = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
         val msgTextView = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
+        val msgRegister = ObjectAnimator.ofFloat(binding.massageRegisterLink, View.ALPHA, 1f).setDuration(100)
+        val linkRegister = ObjectAnimator.ofFloat(binding.registerLink, View.ALPHA, 1f).setDuration(100)
         val tvEmail = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
         val etEmail = ObjectAnimator.ofFloat(binding.emailEditText, View.ALPHA, 1f).setDuration(100)
         val tvPassword = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val etPassword = ObjectAnimator.ofFloat(binding.passwordEditText, View.ALPHA, 1f).setDuration(100)
         val btnLogin = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
-        val msgRegister = ObjectAnimator.ofFloat(binding.massageRegisterLink, View.ALPHA, 1f).setDuration(100)
-        val linkRegister = ObjectAnimator.ofFloat(binding.registerLink, View.ALPHA, 1f).setDuration(100)
+
 
         val textAnim = AnimatorSet().apply {
             playTogether(titleTextView, msgTextView, msgRegister, linkRegister)
         }
+
         val layoutAnim = AnimatorSet().apply {
-            playTogether(tvEmail, etEmail, tvPassword, etPassword)
+            playTogether(tvEmail, etEmail, tvPassword, etPassword, btnLogin)
         }
 
         AnimatorSet().apply {
             playSequentially(
+                translateAnimator,
                 textAnim,
-                layoutAnim,
-                btnLogin
+                layoutAnim
             )
             startDelay = 100
-        }.start()
+            start()
+        }
     }
 }
